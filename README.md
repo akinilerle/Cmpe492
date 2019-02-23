@@ -11,3 +11,8 @@ A user story should be:
 * Uniform
 * Independent
 * Well Formed
+
+
+### Mock-up
+
+![Mock-up](https://raw.githubusercontent.com/akinilerle/Cmpe492/master/media/mock-up.png)

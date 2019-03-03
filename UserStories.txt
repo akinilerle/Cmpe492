@@ -1,25 +1,5 @@
-Sıkça sinemaya giden bir izleyici olarak, yakınımdaki sinema salonlarında vizyona yeni girecek filmler hakkında bütün bilgilere telefonumdan ulaşabilmek, böylece her filmin web sitesini ayrı ayrı kontrol etmeye ihtiyaç duymamak istiyorum.
+Bir product manager olarak, kullanıcı hikayelerimin formata uygun olup olmadıklarını kontrol etmek istiyorum.
 
-Rapor uzmanı olarak, verileri kolaylıkla bulabilmek için, listeler içerisinde arama fonksiyonuna ihtiyacım var.
+Bir product manager olarak, kullanıcı hikayelerimin formatındaki hatalarını görebilmek istiyorum istiyorum.
 
-Satış Yöneticisi olarak, operasyonel yükün azalması için, aylık satış raporlarının otomatik olarak mailime düşmesini istiyorum.
-
-Son kullanıcı olarak, her şeyin yolunda olduğunu kontrol etmek için, hesap etkinliğime ilişkin bir rapor almak istiyorum.
-
-Bir sistem yöneticisi olarak, şifreleri sıfırlamak istiyorum.
-
-Bir sistem yöneticisi olarak, sistem için bir SQL veritabanına sahip olmak istiyorum.
-
-Sistem Yöneticisi olarak, kullanıcının sisteme girmesi ve yetkileri çerçevesinde işlem yapabilmesi için, kullanıcıyı sisteme eklemek istiyorum.
-
-Listeleme sayfasını ziyaret eden ziyaretçi olarak, arama sonuçlarını renge göre filtrelemek istiyorum, böylece aradığım renk ürüne kolayca ulaşabileceğim.
-
-Kütüphane görevlisi olarak kitap ismine göre arama yapmak istiyorum böylece bir kitabın bilgilerine çok çabuk ulaşabileceğim.
-
-Öğrenci olarak kütüphane abonelik kartı almak istiyorum böylece kütüphaneden ödünç kitap alabileceğim.
-
-Kullanıcı olarak, ödememi kredi kartı seçeneği ile yapmak istiyorum.
-
-Kullanıcı olarak, ödememi EFT seçeneği ile yapmak istiyorum.
-
-Kullanıcı olarak, ödememi kapıda ödeme seçeneği ile yapmak istiyorum.
+Bir product manager olarak, kullanıcı hikayelerimi excel dosyasından topluca kontrol edebilmek istiyorum.

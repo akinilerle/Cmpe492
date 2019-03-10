@@ -18,8 +18,18 @@ The story should have one verb and it should not contain any conjunction words. 
 * Unique
 A requirement should have only one user story.
 
+* Well Formed
+The story should follow one of the given user story templates: 
+
+- "Bir \<ROL\> olarak, \<ISTEK\> istiyorum. [Böylece, <SEBEP>]".
+  
+- "Bir \<ROL\> olarak,[\<SEBEP\> için,]\<ISTEK\> istiyorum.". 
+
+Violating Example: "Bir kullanıcı olarak, yeni mail geldiğinde bildirim almalıyım."
+
 * Uniform
-The story should follow the given user story template: "Bir \<ROL\> olarak, \<ISTEK\> istiyorum. [Böylece, <SEBEP>]". Violating Example: "Bir kullanıcı olarak, yeni mail geldiğinde bildirim almalıyım."
+All of the user stories should follow the same template.
+ 
 
 * Independent
 Another user story should not be referenced.

@@ -23,7 +23,7 @@ The story should follow one of the given user story templates:
 
 - "Bir \<ROL\> olarak, \<ISTEK\> istiyorum. [Böylece, <SEBEP>]".
   
-- "Bir \<ROL\> olarak,[\<SEBEP\> için,]\<ISTEK\> istiyorum.". 
+- "Bir \<ROL\> olarak,[ \<SEBEP\> için,] \<ISTEK\> istiyorum.". 
 
 Violating Example: "Bir kullanıcı olarak, yeni mail geldiğinde bildirim almalıyım."
 

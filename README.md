@@ -1,5 +1,5 @@
 # Cmpe492
-A tool for checking the quality of user stories in Turkish.
+The purpose of this project is to create a tool for checking the quality of user stories in Turkish. Therefore, enforcing a common set of requirements for user stories in teams that use it.
 
 ### Quality Metrics
 A user story should be:

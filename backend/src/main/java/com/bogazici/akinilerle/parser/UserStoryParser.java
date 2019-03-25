@@ -132,7 +132,7 @@ public class UserStoryParser {
 
 
     private String normalize(String input) {
-        return input.replaceAll("[^a-zA-Z ÇçĞğİıÖöŞşÜü]", "").toLowerCase();
+        return input.replaceAll("[^a-zA-Z0-9 ÇçĞğİıÖöŞşÜü]", "").toLowerCase();
     }
 
 }

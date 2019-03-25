@@ -12,11 +12,11 @@ public class UserStoryParserTest {
     @Test
     public void it_should_parse_format_1() throws Exception {
         UserStory userStory1 = userStoryParser.parseSingle("Sisteme kayıtlı bir üye olarak, kredi kartı ya" +
-                " da debit kart ile ödeme seçeneğimin olmasını istiyorum, böylece etkinlik bileti için sadece elden" +
+                " da debit kart ile 2 ödeme seçeneğimin olmasını istiyorum, böylece etkinlik bileti için sadece elden" +
                 " nakit ile ödeme yapmak zorunda kalmayacağım.\n");
 
         assertEquals(userStory1.getRole(),"sisteme kayıtlı bir üye olarak");
-        assertEquals(userStory1.getRequest(),"kredi kartı ya da debit kart ile ödeme seçeneğimin olmasını istiyorum");
+        assertEquals(userStory1.getRequest(),"kredi kartı ya da debit kart ile 2 ödeme seçeneğimin olmasını istiyorum");
         assertEquals(userStory1.getBenefit(),"böylece etkinlik bileti için sadece elden nakit ile ödeme yapmak zorunda kalmayacağım");
         assertEquals(userStory1.getType(),UserStory.Type.TYPE_1);
 

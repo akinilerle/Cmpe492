@@ -3,6 +3,7 @@ package com.bogazici.akinilerle.parser;
 import com.bogazici.akinilerle.model.UserStory;
 import com.google.common.collect.Sets;
 import javafx.util.Pair;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Pattern;
 
+@Service
 public class UserStoryParser {
 
     private static final String FORMAT_1_REGEX = ".*olarak.*(istiyor(um|uz)|ihtiyacım(ız)? var).*böylece.*";
@@ -36,7 +38,6 @@ public class UserStoryParser {
     }
 
     private UserStory parseFormat1(String[] words) {
-
         Pair<String, Integer> roleVals = parseRole(words, 0);
         String rolePart = roleVals.getKey();
         int i = roleVals.getValue();
@@ -48,11 +49,10 @@ public class UserStoryParser {
         List benefitWordList = Arrays.asList(words).subList(i,words.length);
         String benefitPart = String.join(" ", benefitWordList);
 
-        return new UserStory(rolePart,requestPart,benefitPart,UserStory.Type.TYPE_1);
+        return new UserStory(rolePart,requestPart,benefitPart,UserStory.Type.TYPE_RRB);
     }
 
     private UserStory parseFormat2(String[] words) {
-
         Pair<String, Integer> roleVals = parseRole(words, 0);
         String rolePart = roleVals.getKey();
         int i = roleVals.getValue();
@@ -64,7 +64,7 @@ public class UserStoryParser {
         List requestWordList = Arrays.asList(words).subList(i,words.length);
         String requestPart = String.join(" ", requestWordList);
 
-        return new UserStory(rolePart,requestPart,benefitPart,UserStory.Type.TYPE_2);
+        return new UserStory(rolePart,requestPart,benefitPart,UserStory.Type.TYPE_RBR);
     }
 
     private UserStory parseFormat3(String[] words) {
@@ -75,7 +75,7 @@ public class UserStoryParser {
         List requestWordList = Arrays.asList(words).subList(i,words.length);
         String requestPart = String.join(" ", requestWordList);
 
-        return new UserStory(rolePart,requestPart,null,UserStory.Type.TYPE_3);
+        return new UserStory(rolePart,requestPart,null,UserStory.Type.TYPE_RR);
     }
 
     private Pair<String,Integer> parseRole(String[] words, int startIndex) {
@@ -115,7 +115,6 @@ public class UserStoryParser {
     }
 
     private Pair<String,Integer> parseBenefit(String[] words, int startIndex) {
-
         int i = startIndex;
         ArrayList<String> benefitWords = new ArrayList<>();
 

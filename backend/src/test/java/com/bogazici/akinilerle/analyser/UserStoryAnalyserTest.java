@@ -13,7 +13,7 @@ public class UserStoryAnalyserTest {
     UserStoryAnalyser userStoryAnalyser = new UserStoryAnalyser();
 
     @Test
-    public void it_should_find_misspellings_and_suggest_corrections() throws Exception {
+    public void it_should_find_errors_in_valid_user_stories() throws Exception {
         UserStory userStory = new UserStory("sisteme kayıtlı bir üye olarak"
                 ,"kredi kartı ya da debit kart ile 2 ödeme seçeneğimin olmasını istiyorum"
                 ,"böylece etkinlik bileti için sadece elden nakit ile ödeme yapmak zorunda kalmayacağım"
@@ -67,6 +67,30 @@ public class UserStoryAnalyserTest {
                 ,UserStory.Type.TYPE_RR);
         report = userStoryAnalyser.analyseSentence(userStory);
         assertNull(report);
+    }
+
+    @Test
+    public void it_should_find_misstructured_sentences() throws Exception {
+        UserStory userStory = new UserStory("etkinlik olsun konser olsun düzenlemek isteyen bir kuruluş olarak"
+                ,"farklı bir arayüz kullanmak istiyoruz"
+                ,"böylece gerçekleşecek etkinlikleri görmekten çok etkinliğimiz" +
+                " için kiralayabileceğimiz uygun yerleri görmüş olacağız"
+                ,UserStory.Type.TYPE_RRB);
+        Report report = userStoryAnalyser.analyseSentence(userStory);
+        assertNotNull(report);
+        assertEquals(1, report.getMessages().size());
+        assertEquals("Kullanıcı hikayesinin rol kısmı yüklem içermemelidir. Yüklemler: [olsun, olsun]"
+                , report.getMessages().get(0));
+
+        userStory = new UserStory("son kullanıcı olarak"
+                ,"hesap etkinliğime ilişkin bir rapor almak istiyorum"
+                ,"her şeyin yolunda olduğunu kontrol edeceğim için"
+                ,UserStory.Type.TYPE_RBR);
+        report = userStoryAnalyser.analyseSentence(userStory);
+        assertNotNull(report);
+        assertEquals(1, report.getMessages().size());
+        assertEquals("Kullanıcı hikayesinin fayda kısmı yüklem içermemelidir. Yüklemler: [edeceğim]"
+                , report.getMessages().get(0));
     }
 
 }

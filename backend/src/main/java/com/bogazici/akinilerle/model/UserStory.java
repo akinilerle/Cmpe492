@@ -8,9 +8,9 @@ import lombok.Data;
 public class UserStory {
 
     public enum Type{
-        TYPE_RRB, //RoleRequestBenefit:  <ROLE> olarak, <REQUEST> istiyorum. Böylece <BENEFIT>.
-        TYPE_RBR, //RoleBenefitRequest:  <ROLE> olarak, <BENEFIT> için, <REQUEST> istiyorum.
-        TYPE_RR //RoleRequest:   <ROLE> olarak, <REQUEST> istiyorum.
+        TYPE_RRB, // RoleRequestBenefit:  <ROLE> olarak, <REQUEST> istiyorum. Böylece <BENEFIT>.
+        TYPE_RBR, // RoleBenefitRequest:  <ROLE> olarak, <BENEFIT> için, <REQUEST> istiyorum.
+        TYPE_RR //   RoleRequest:   <ROLE> olarak, <REQUEST> istiyorum.
     }
 
     private String role;

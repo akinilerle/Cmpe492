@@ -34,7 +34,9 @@ public class UserStoryAnalyser {
         if(Objects.nonNull(report)){
             return report;
         }
-        return null;
+        return Report.builder()
+                .type(Report.Type.OK)
+                .build();
     }
 
     private Report spellCheck(UserStory userStory){

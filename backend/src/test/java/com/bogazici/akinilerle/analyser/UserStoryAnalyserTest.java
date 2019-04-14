@@ -52,21 +52,21 @@ public class UserStoryAnalyserTest {
                 " için kiralayabileceğimiz uygun yerleri görmüş olacağız"
                 ,UserStory.Type.TYPE_RRB);
         Report report = userStoryAnalyser.analyseSentence(userStory);
-        assertNull(report);
+        assertEquals(Report.Type.OK,report.getType());
 
         userStory = new UserStory("son kullanıcı olarak"
                 ,"hesap etkinliğime ilişkin bir rapor almak istiyorum"
                 ,"her şeyin yolunda olduğunu kontrol etmek için"
                 ,UserStory.Type.TYPE_RBR);
         report = userStoryAnalyser.analyseSentence(userStory);
-        assertNull(report);
+        assertEquals(Report.Type.OK,report.getType());
 
         userStory = new UserStory("katılımcı olarak"
                 ,"otomatlarda banka kartı kullanabilmek istiyorum"
                 ,null
                 ,UserStory.Type.TYPE_RR);
         report = userStoryAnalyser.analyseSentence(userStory);
-        assertNull(report);
+        assertEquals(Report.Type.OK,report.getType());
     }
 
     @Test

@@ -7,8 +7,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 @Service
@@ -38,11 +40,11 @@ public class UserStoryParser {
     }
 
     private UserStory parseFormat1(String[] words) {
-        Pair<String, Integer> roleVals = parseRole(words, 0);
+        Map.Entry<String, Integer> roleVals = parseRole(words, 0);
         String rolePart = roleVals.getKey();
         int i = roleVals.getValue();
 
-        Pair<String, Integer> requestVals = parseRequest(words, i);
+        Map.Entry<String, Integer> requestVals = parseRequest(words, i);
         String requestPart = requestVals.getKey();
         i = requestVals.getValue();
 
@@ -53,11 +55,11 @@ public class UserStoryParser {
     }
 
     private UserStory parseFormat2(String[] words) {
-        Pair<String, Integer> roleVals = parseRole(words, 0);
+        Map.Entry<String, Integer> roleVals = parseRole(words, 0);
         String rolePart = roleVals.getKey();
         int i = roleVals.getValue();
 
-        Pair<String, Integer> benefitVals = parseBenefit(words, i);
+        Map.Entry<String, Integer> benefitVals = parseBenefit(words, i);
         String benefitPart = benefitVals.getKey();
         i = benefitVals.getValue();
 
@@ -68,7 +70,7 @@ public class UserStoryParser {
     }
 
     private UserStory parseFormat3(String[] words) {
-        Pair<String, Integer> roleVals = parseRole(words, 0);
+        Map.Entry<String, Integer> roleVals = parseRole(words, 0);
         String rolePart = roleVals.getKey();
         int i = roleVals.getValue();
 
@@ -78,7 +80,7 @@ public class UserStoryParser {
         return new UserStory(rolePart,requestPart,null,UserStory.Type.TYPE_RR);
     }
 
-    private Pair<String,Integer> parseRole(String[] words, int startIndex) {
+    private Map.Entry<String,Integer> parseRole(String[] words, int startIndex) {
         int i = startIndex;
         ArrayList<String> roleWords = new ArrayList<>();
 
@@ -86,13 +88,11 @@ public class UserStoryParser {
             roleWords.add(words[i]);
             i++;
         }
-
         roleWords.add(words[i]);
-
-        return new Pair<>(String.join(" ",roleWords), ++i);
+        return new HashMap.SimpleEntry<>(String.join(" ",roleWords), ++i);
     }
 
-    private Pair<String,Integer> parseRequest(String[] words, int startIndex) {
+    private Map.Entry<String,Integer> parseRequest(String[] words, int startIndex) {
         int i = startIndex;
         HashSet<String> requestKeyWords1 = Sets.newHashSet("istiyorum", "istiyoruz");
         HashSet<String> requestKeyWords2 = Sets.newHashSet("ihtiyacım", "ihtiyacımız");
@@ -111,10 +111,10 @@ public class UserStoryParser {
             i++;
         }
 
-        return new Pair<>(String.join(" ",requestWords), ++i);
+        return new HashMap.SimpleEntry<>(String.join(" ",requestWords), ++i);
     }
 
-    private Pair<String,Integer> parseBenefit(String[] words, int startIndex) {
+    private Map.Entry<String,Integer> parseBenefit(String[] words, int startIndex) {
         int i = startIndex;
         ArrayList<String> benefitWords = new ArrayList<>();
 
@@ -125,7 +125,7 @@ public class UserStoryParser {
 
         benefitWords.add(words[i]);
 
-        return new Pair<>(String.join(" ",benefitWords), ++i);
+        return new HashMap.SimpleEntry<>(String.join(" ",benefitWords), ++i);
     }
 
 

@@ -1,6 +1,6 @@
 package com.bogazici.akinilerle.analyser;
 
-import com.bogazici.akinilerle.model.Report;
+import com.bogazici.akinilerle.model.response.Report;
 import com.bogazici.akinilerle.model.UserStory;
 import org.junit.Test;
 

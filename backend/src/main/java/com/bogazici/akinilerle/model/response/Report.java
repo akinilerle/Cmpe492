@@ -1,4 +1,4 @@
-package com.bogazici.akinilerle.model;
+package com.bogazici.akinilerle.model.response;
 
 import lombok.Builder;
 import lombok.Data;
@@ -18,6 +18,7 @@ public class Report {
 
     @Singular
     List<String> messages;
+    String story;
 
     Type type;
 

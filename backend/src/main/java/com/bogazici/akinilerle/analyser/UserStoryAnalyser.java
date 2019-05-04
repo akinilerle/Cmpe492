@@ -1,6 +1,6 @@
 package com.bogazici.akinilerle.analyser;
 
-import com.bogazici.akinilerle.model.Report;
+import com.bogazici.akinilerle.model.response.Report;
 import com.bogazici.akinilerle.model.UserStory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -36,6 +36,7 @@ public class UserStoryAnalyser {
         }
         return Report.builder()
                 .type(Report.Type.OK)
+                .story(userStory.toString())
                 .build();
     }
 

@@ -1,6 +1,7 @@
 package com.bogazici.akinilerle.parser;
 
 import com.bogazici.akinilerle.model.UserStory;
+import com.bogazici.akinilerle.model.response.Report;
 import com.google.common.collect.Sets;
 import javafx.util.Pair;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ import java.util.regex.Pattern;
 public class UserStoryParser {
 
     private static final String FORMAT_1_REGEX = ".*olarak.*(istiyor(um|uz)|ihtiyacım(ız)? var).*böylece.*";
-    private static final String FORMAT_2_REGEX = ".*olarak.*için.*(istiyor(um|uz)|ihtiyacım(ız)? var)";
+    private static final String FORMAT_2_REGEX = ".*olarak.* için .*(istiyor(um|uz)|ihtiyacım(ız)? var)";
     private static final String FORMAT_3_REGEX = ".*olarak.*(istiyor(um|uz)|ihtiyacım(ız)? var)";
 
     public UserStory parseSingle(String userStory){
@@ -34,7 +35,6 @@ public class UserStoryParser {
             return parseFormat3(words);
         }
         else{
-            //TODO: return format error here
             return null;
         }
     }
@@ -80,6 +80,12 @@ public class UserStoryParser {
         return new UserStory(rolePart,requestPart,null,UserStory.Type.TYPE_RR);
     }
 
+    /** Extracts role part of the user story
+     *
+     * @param words
+     * @param startIndex
+     * @return Role part as key, and next index to parse as value
+     */
     private Map.Entry<String,Integer> parseRole(String[] words, int startIndex) {
         int i = startIndex;
         ArrayList<String> roleWords = new ArrayList<>();
@@ -92,6 +98,12 @@ public class UserStoryParser {
         return new HashMap.SimpleEntry<>(String.join(" ",roleWords), ++i);
     }
 
+    /** Extracts request part of the user story
+     *
+     * @param words
+     * @param startIndex
+     * @return Request part as key, and next index to parse as value
+     */
     private Map.Entry<String,Integer> parseRequest(String[] words, int startIndex) {
         int i = startIndex;
         HashSet<String> requestKeyWords1 = Sets.newHashSet("istiyorum", "istiyoruz");
@@ -114,6 +126,12 @@ public class UserStoryParser {
         return new HashMap.SimpleEntry<>(String.join(" ",requestWords), ++i);
     }
 
+    /** Extracts benefit part of the user story
+     *
+     * @param words
+     * @param startIndex
+     * @return Benefit part as key, and next index to parse as value
+     */
     private Map.Entry<String,Integer> parseBenefit(String[] words, int startIndex) {
         int i = startIndex;
         ArrayList<String> benefitWords = new ArrayList<>();
@@ -128,8 +146,11 @@ public class UserStoryParser {
         return new HashMap.SimpleEntry<>(String.join(" ",benefitWords), ++i);
     }
 
-
-
+    /**
+     * Removes every non alpha numeric character
+     * @param input
+     * @return normalized string
+     */
     private String normalize(String input) {
         return input.replaceAll("[^a-zA-Z0-9 ÇçĞğİıÖöŞşÜü]", "").toLowerCase();
     }

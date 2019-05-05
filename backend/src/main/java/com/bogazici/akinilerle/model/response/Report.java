@@ -1,5 +1,6 @@
 package com.bogazici.akinilerle.model.response;
 
+import com.bogazici.akinilerle.model.UserStory;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Singular;
@@ -18,6 +19,7 @@ public class Report {
 
     @Singular
     List<String> messages;
+    UserStory.Type userStoryType;
     String story;
 
     Type type;

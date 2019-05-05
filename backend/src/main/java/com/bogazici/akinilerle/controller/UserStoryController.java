@@ -1,5 +1,6 @@
 package com.bogazici.akinilerle.controller;
 
+import com.bogazici.akinilerle.model.request.MultipleUserStory;
 import com.bogazici.akinilerle.model.request.SingleUserStory;
 import com.bogazici.akinilerle.model.response.Report;
 import com.bogazici.akinilerle.service.UserStoryService;
@@ -30,8 +31,13 @@ public class UserStoryController {
     }
 
     @PostMapping("/analyse/txt")
-    public List<Report> analyseMultipleUserStory(@RequestParam("uploadingFiles") MultipartFile uploadingFile) throws IOException {
-        return service.analyseMultipleUserStory(uploadingFile);
+    public List<Report> analyseMultipleUserStoryFile(@RequestParam("uploadingFiles") MultipartFile uploadingFile) throws IOException {
+        return service.analyseMultipleUserStoryFile(uploadingFile);
+    }
+
+    @PostMapping("/analyse")
+    public List<Report> analyseMultipleUserStory(@RequestBody MultipleUserStory userStories) {
+        return service.analyseMultipleUserStory(userStories.getUserStoryList());
     }
 
 }

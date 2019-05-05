@@ -10,7 +10,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -39,8 +42,7 @@ public class UserStoryService {
         return userStoryAnalyser.analyseSentence(userStory);
     }
 
-    public List<Report> analyseMultipleUserStory(MultipartFile uploadingFile) throws IOException {
-
+    public List<Report> analyseMultipleUserStoryFile(MultipartFile uploadingFile) throws IOException {
         if (!uploadingFile.isEmpty()) {
             //Construct the file in memory as list of strings
             byte[] bytes = uploadingFile.getBytes();
@@ -48,14 +50,42 @@ public class UserStoryService {
             String[] userStories = completeData.split("\n");
             List<String> userStoryList = Arrays.asList(userStories);
 
-            //analyse each one
-            return userStoryList.stream()
-                    .filter(s -> !s.equals(""))
-                    .map(this::analyseSingleUserStory)
-                    .collect(Collectors.toList());
+            return analyseMultipleUserStory(userStoryList);
         }
         else {
-            throw new IllegalArgumentException("Empty File");
+            throw new IllegalArgumentException("Boş Dosya");
         }
     }
+
+    public List<Report> analyseMultipleUserStory(List<String> userStoryStringList) {
+        List<Report> reportList = userStoryStringList.stream()
+                .filter(s -> !s.equals(""))
+                .map(this::analyseSingleUserStory) //analyse each one
+                .collect(Collectors.toList());
+
+        UserStory.Type mostUsedType = getMostUsedFormat(reportList);
+
+        for(Report report: reportList){
+            if(report.getUserStoryType() != mostUsedType){
+                report.getMessages().add("Bu kullanıcı hikayesi diğer kullanıcı hikayelerinden farklı bir formattadır.");
+                if(report.getType() == Report.Type.OK){
+                    report.setType(Report.Type.WARNING);
+                }
+            }
+        }
+    }
+
+    public UserStory.Type getMostUsedFormat(List<Report> reports){
+        Map<UserStory.Type, Long> noOfUsages =
+                reports.stream().collect(
+                        Collectors.groupingBy(
+                                Report::getUserStoryType, Collectors.counting()
+                        )
+                );
+
+        return Collections.max(noOfUsages.entrySet(), Comparator.comparing(Map.Entry::getValue))
+                .getKey();
+    }
+
+
 }

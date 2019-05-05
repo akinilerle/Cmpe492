@@ -36,6 +36,7 @@ public class UserStoryAnalyser {
         }
         return Report.builder()
                 .type(Report.Type.OK)
+                .userStoryType(userStory.getType())
                 .story(userStory.toString())
                 .build();
     }

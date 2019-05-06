@@ -11,7 +11,6 @@ import zemberek.normalization.TurkishSpellChecker;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,19 +32,36 @@ public class UserStoryAnalyser {
     }
 
     public Report analyseSentence(UserStory userStory) {
-        Report report = spellCheck(userStory);
-        if(Objects.nonNull(report)){
-            return report;
+        Report spellCheckReport = spellCheck(userStory);
+        Report sentenceReport = checkSentence(userStory);
+
+        if(spellCheckReport == null && sentenceReport == null){ //both checks have no warning or errors
+            return Report.builder()
+                    .type(Report.Type.OK)
+                    .story(userStory.toString())
+                    .userStoryType(userStory.getType())
+                    .build();
         }
-        report = checkSentence(userStory);
-        if(Objects.nonNull(report)){
-            return report;
+        else if (sentenceReport == null){ //one check found a problem, other did not
+            spellCheckReport.setUserStoryType(userStory.getType());
+            return spellCheckReport;
         }
-        return Report.builder()
-                .type(Report.Type.OK)
-                .userStoryType(userStory.getType())
-                .story(userStory.toString())
-                .build();
+        else if (spellCheckReport == null){ //one check found a problem, other did not
+            return sentenceReport;
+        }
+        else{ //both checks found problems, reports need to be merged
+            Report.ReportBuilder reportBuilder = Report.builder();
+            reportBuilder.story(sentenceReport.getStory());
+            reportBuilder.userStoryType(sentenceReport.getUserStoryType());
+            reportBuilder.type(sentenceReport.getType());
+            for(String message: spellCheckReport.getMessages()){
+                reportBuilder.message(message);
+            }
+            for(String message: sentenceReport.getMessages()){
+                reportBuilder.message(message);
+            }
+            return reportBuilder.build();
+        }
     }
 
     private Report spellCheck(UserStory userStory){
@@ -63,9 +79,10 @@ public class UserStoryAnalyser {
                 String errorMessage = "Yazım hatası: \"" + word + "\". Bunu mu demek istediniz? : "
                         + (suggestions.size() <= 3 ? suggestions : suggestions.subList(0,3));
 
-                builder.message(errorMessage);
+                builder.message(errorMessage).story(userStory.toString());
             }
         }
+
         Report report = builder.build();
 
         if(report.getMessages().isEmpty()){

@@ -31,13 +31,19 @@ public class UserStoryController {
     }
 
     @PostMapping("/analyse/txt")
-    public List<Report> analyseMultipleUserStoryFile(@RequestParam("uploadingFiles") MultipartFile uploadingFile) throws IOException {
-        return service.analyseMultipleUserStoryFile(uploadingFile);
+    public List<Report> analyseMultipleUserStoryTxtFile(@RequestParam("uploadingFiles") MultipartFile uploadingFile) throws IOException {
+        return service.analyseMultipleUserStoryTxtFile(uploadingFile);
+    }
+
+    @PostMapping("/analyse/csv")
+    public List<Report> analyseMultipleUserStoryCsvFile(@RequestParam("uploadingFiles") MultipartFile uploadingFile) throws IOException {
+        return service.analyseMultipleUserStoryCsvFile(uploadingFile);
     }
 
     @PostMapping("/analyse/list")
     public List<Report> analyseMultipleUserStory(@RequestBody MultipleUserStory userStories) {
         return service.analyseMultipleUserStory(userStories.getUserStoryList());
     }
+
 
 }

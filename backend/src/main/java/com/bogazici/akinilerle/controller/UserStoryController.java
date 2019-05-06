@@ -35,7 +35,7 @@ public class UserStoryController {
         return service.analyseMultipleUserStoryFile(uploadingFile);
     }
 
-    @PostMapping("/analyse")
+    @PostMapping("/analyse/list")
     public List<Report> analyseMultipleUserStory(@RequestBody MultipleUserStory userStories) {
         return service.analyseMultipleUserStory(userStories.getUserStoryList());
     }

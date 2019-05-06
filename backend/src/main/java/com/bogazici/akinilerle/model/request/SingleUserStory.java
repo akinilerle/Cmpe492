@@ -1,11 +1,24 @@
 package com.bogazici.akinilerle.model.request;
 
-import lombok.Data;
 import lombok.NonNull;
 
-@Data
 public class SingleUserStory {
 
     @NonNull
-    String userStory;
+    private String userStory;
+
+    public SingleUserStory() {
+    }
+
+    public SingleUserStory(@NonNull String userStory) {
+        this.userStory = userStory;
+    }
+
+    public String getUserStory() {
+        return userStory;
+    }
+
+    public void setUserStory(String userStory) {
+        this.userStory = userStory;
+    }
 }

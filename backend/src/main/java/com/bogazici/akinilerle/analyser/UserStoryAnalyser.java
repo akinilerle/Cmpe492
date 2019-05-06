@@ -18,11 +18,18 @@ import java.util.stream.Collectors;
 public class UserStoryAnalyser {
 
     private TurkishMorphology turkishMorphology;
+    private TurkishSpellChecker spellChecker;
 
     public UserStoryAnalyser() {
         turkishMorphology = TurkishMorphology.builder()
                 .setLexicon(RootLexicon.DEFAULT)
                 .build();
+        try {
+            spellChecker = new TurkishSpellChecker(turkishMorphology);
+        } catch (IOException e) {
+            System.out.println("Could not initialize turkish spell checker");
+            e.printStackTrace();
+        }
     }
 
     public Report analyseSentence(UserStory userStory) {
@@ -42,15 +49,10 @@ public class UserStoryAnalyser {
     }
 
     private Report spellCheck(UserStory userStory){
-        TurkishMorphology morphology = TurkishMorphology.createWithDefaults();
-        TurkishSpellChecker spellChecker;
-        try {
-            spellChecker = new TurkishSpellChecker(morphology);
-        } catch (IOException e) {
-            System.out.println("Could not initialize turkish spell checker");
-            e.printStackTrace();
+        if(spellChecker == null){
             return null;
         }
+
         Report.ReportBuilder builder = Report.builder().type(Report.Type.WARNING);
         String fullStory =  userStory.getRole() + " " + userStory.getRequest()
                 + (StringUtils.isEmpty(userStory.getBenefit()) ? "" : " " + userStory.getBenefit());

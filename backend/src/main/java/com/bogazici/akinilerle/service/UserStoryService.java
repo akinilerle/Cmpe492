@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -67,17 +68,24 @@ public class UserStoryService {
 
         for(Report report: reportList){
             if(report.getUserStoryType() != mostUsedType){
-                report.getMessages().add("Bu kullanıcı hikayesi diğer kullanıcı hikayelerinden farklı bir formattadır.");
+
+                ArrayList<String> newMessages = new ArrayList<>(report.getMessages());
+                newMessages.add("Bu kullanıcı hikayesi diğer kullanıcı hikayelerinden farklı bir formattadır.");
+                report.setMessages(newMessages);
+
                 if(report.getType() == Report.Type.OK){
                     report.setType(Report.Type.WARNING);
                 }
             }
         }
+        return reportList;
     }
 
     public UserStory.Type getMostUsedFormat(List<Report> reports){
         Map<UserStory.Type, Long> noOfUsages =
-                reports.stream().collect(
+                reports.stream()
+                        .filter(r -> r.getUserStoryType() != null)
+                        .collect(
                         Collectors.groupingBy(
                                 Report::getUserStoryType, Collectors.counting()
                         )

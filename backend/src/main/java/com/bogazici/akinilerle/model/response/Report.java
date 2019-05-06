@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Singular;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -18,7 +19,7 @@ public class Report {
     }
 
     @Singular
-    List<String> messages;
+    List<String> messages = new ArrayList<>();
     UserStory.Type userStoryType;
     String story;
 

@@ -87,6 +87,7 @@ public class UserStoryService {
             List<String> userStoryList = Arrays.asList(rows)
                                                 .subList(1,rows.length)
                                                 .stream()
+                                                .filter(s -> !s.isEmpty())
                                                 .map(s -> s.split(";")[finalIndexOfUserStories])
                                                 .collect(Collectors.toList());
 

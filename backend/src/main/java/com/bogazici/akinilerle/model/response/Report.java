@@ -22,7 +22,6 @@ public class Report {
     List<String> messages = new ArrayList<>();
     UserStory.Type userStoryType;
     String story;
-
     Type type;
 
 }

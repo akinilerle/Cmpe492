@@ -70,9 +70,8 @@ public class UserStoryService {
                 throw new IllegalArgumentException("Boş Dosya");
             }
 
-            int indexOfUserStories = 0;
-
             //find the column that contains the user stories
+            int indexOfUserStories = 0;
             String firstRowParts[] = rows[0].split(";");
             for(int i=0;i<firstRowParts.length;i++){
                 String lowerCasePart = firstRowParts[i].toLowerCase();
@@ -85,10 +84,10 @@ public class UserStoryService {
 
             int finalIndexOfUserStories = indexOfUserStories;
             List<String> userStoryList = Arrays.asList(rows)
-                                                .subList(1,rows.length)
+                                                .subList(1,rows.length) //delete the headers row
                                                 .stream()
-                                                .filter(s -> !s.isEmpty())
-                                                .map(s -> s.split(";")[finalIndexOfUserStories])
+                                                .filter(s -> !s.isEmpty())//filter empty rows
+                                                .map(s -> s.split(";")[finalIndexOfUserStories]) //get the user story columns
                                                 .collect(Collectors.toList());
 
             return analyseMultipleUserStory(userStoryList);
@@ -104,6 +103,8 @@ public class UserStoryService {
                 .map(this::analyseSingleUserStory) //analyse each one
                 .collect(Collectors.toList());
 
+
+        //Check if the list of UserStories use the same format. If not, mark the least used formats with Warnings.
         UserStory.Type mostUsedType = getMostUsedFormat(reportList);
 
         for(Report report: reportList){
@@ -121,8 +122,13 @@ public class UserStoryService {
         return reportList;
     }
 
+    /**
+     * Checks the formats of the list of reports of user stories and returns the most used one
+     * @param reports
+     * @return most used user story type in the list
+     */
     public UserStory.Type getMostUsedFormat(List<Report> reports){
-        Map<UserStory.Type, Long> noOfUsages =
+        Map<UserStory.Type, Long> noOfUsages = //calculate the number of usages
                 reports.stream()
                         .filter(Objects::nonNull)
                         .filter(r -> r.getUserStoryType() != null)
@@ -135,7 +141,7 @@ public class UserStoryService {
         if(noOfUsages.entrySet().size() == 0){
             return null;
         }
-        else{
+        else{ //get and return the max
             return Collections.max(noOfUsages.entrySet(), Comparator.comparing(Map.Entry::getValue))
                     .getKey();
         }

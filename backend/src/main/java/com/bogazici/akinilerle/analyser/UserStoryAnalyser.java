@@ -42,11 +42,11 @@ public class UserStoryAnalyser {
                     .userStoryType(userStory.getType())
                     .build();
         }
-        else if (sentenceReport == null){ //one check found a problem, other did not
+        else if (sentenceReport == null){ //spell check found a problem, sentence check did not
             spellCheckReport.setUserStoryType(userStory.getType());
             return spellCheckReport;
         }
-        else if (spellCheckReport == null){ //one check found a problem, other did not
+        else if (spellCheckReport == null){ //sentence check found a problem, spell check did not
             return sentenceReport;
         }
         else{ //both checks found problems, reports need to be merged
@@ -64,20 +64,25 @@ public class UserStoryAnalyser {
         }
     }
 
+    /**
+     * Spell checks words in the user story.
+     * @param userStory
+     * @return Report object containgin the suggestion message, or null if there are no misspellings
+     */
     private Report spellCheck(UserStory userStory){
         if(spellChecker == null){
             return null;
         }
-
         Report.ReportBuilder builder = Report.builder().type(Report.Type.WARNING);
+
         String fullStory =  userStory.getRole() + " " + userStory.getRequest()
                 + (StringUtils.isEmpty(userStory.getBenefit()) ? "" : " " + userStory.getBenefit());
 
-        for(String word: fullStory.split(" ")){
-            if (!spellChecker.check(word)){
+        for(String word: fullStory.split(" ")){ //check spelling of every word
+            if (!spellChecker.check(word)){ //if the word is misspelled
                 List<String> suggestions = spellChecker.suggestForWord(word);
                 String errorMessage = "Yazım hatası: \"" + word + "\". Bunu mu demek istediniz? : "
-                        + (suggestions.size() <= 3 ? suggestions : suggestions.subList(0,3));
+                        + (suggestions.size() <= 3 ? suggestions : suggestions.subList(0,3)); //add suggestions
 
                 builder.message(errorMessage).story(userStory.toString());
             }
@@ -85,7 +90,7 @@ public class UserStoryAnalyser {
 
         Report report = builder.build();
 
-        if(report.getMessages().isEmpty()){
+        if(report.getMessages().isEmpty()){//no misspellings found
             return null;
         }
         else {
@@ -93,6 +98,11 @@ public class UserStoryAnalyser {
         }
     }
 
+    /**
+     * Checks the number of verbs in role,request and benefit parts of the user story.
+     * @param userStory
+     * @return Report containing the error message and the verblist. returns null if there is no error
+     */
     private Report checkSentence(UserStory userStory){
         List<String> roleVerbs = getVerbs(userStory.getRole());
         if(roleVerbs.size() > 0){
@@ -122,6 +132,11 @@ public class UserStoryAnalyser {
         return null;
     }
 
+    /**
+     * get the verbs in a given sentence.
+     * @param sentence
+     * @return list of strings containing the verbs.
+     */
     private List<String> getVerbs(String sentence){
 
         return turkishMorphology.analyzeAndDisambiguate(sentence)

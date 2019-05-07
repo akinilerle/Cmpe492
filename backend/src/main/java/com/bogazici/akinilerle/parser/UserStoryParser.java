@@ -1,9 +1,7 @@
 package com.bogazici.akinilerle.parser;
 
 import com.bogazici.akinilerle.model.UserStory;
-import com.bogazici.akinilerle.model.response.Report;
 import com.google.common.collect.Sets;
-import javafx.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,6 +19,11 @@ public class UserStoryParser {
     private static final String FORMAT_2_REGEX = ".*olarak.* için .*(istiyor(um|uz)|ihtiyacım(ız)? var)";
     private static final String FORMAT_3_REGEX = ".*olarak.*(istiyor(um|uz)|ihtiyacım(ız)? var)";
 
+    /**
+     * converts a given user story string into a UserStory instance
+     * @param originalUserStory
+     * @return UserStory if parsable, null otherwise
+     */
     public UserStory parseSingle(String originalUserStory){
         String normalizedUserStory = normalize(originalUserStory);
         String[] words = normalizedUserStory.split(" ");
@@ -34,11 +37,17 @@ public class UserStoryParser {
         else if(Pattern.matches(FORMAT_3_REGEX,normalizedUserStory)){
             return parseFormat3(words,originalUserStory);
         }
-        else{
+        else{//matches no known format
             return null;
         }
     }
 
+    /**
+     * parses a UserStory from words that conforms to format 1.
+     * @param words
+     * @param originalStory
+     * @return UserStory instance
+     */
     private UserStory parseFormat1(String[] words, String originalStory) {
         Map.Entry<String, Integer> roleVals = parseRole(words, 0);
         String rolePart = roleVals.getKey();
@@ -48,40 +57,53 @@ public class UserStoryParser {
         String requestPart = requestVals.getKey();
         i = requestVals.getValue();
 
-        List benefitWordList = Arrays.asList(words).subList(i,words.length);
+        List<String> benefitWordList = Arrays.asList(words).subList(i,words.length);
         String benefitPart = String.join(" ", benefitWordList);
 
         return new UserStory(rolePart,requestPart,benefitPart,originalStory,UserStory.Type.TYPE_RRB);
     }
 
+    /**
+     * parses a UserStory from words that conforms to format 2.
+     * @param words
+     * @param originalStory
+     * @return UserStory instance
+     */
     private UserStory parseFormat2(String[] words, String originalStory) {
         Map.Entry<String, Integer> roleVals = parseRole(words, 0);
         String rolePart = roleVals.getKey();
-        int i = roleVals.getValue();
+        int i = roleVals.getValue(); //index that next part starts from.
 
-        Map.Entry<String, Integer> benefitVals = parseBenefit(words, i);
+        Map.Entry<String, Integer> benefitVals = parseBenefitFormat2(words, i);
         String benefitPart = benefitVals.getKey();
-        i = benefitVals.getValue();
+        i = benefitVals.getValue(); //index that next part starts from.
 
-        List requestWordList = Arrays.asList(words).subList(i,words.length);
+        List<String> requestWordList = Arrays.asList(words).subList(i,words.length);
         String requestPart = String.join(" ", requestWordList);
 
         return new UserStory(rolePart,requestPart,benefitPart,originalStory,UserStory.Type.TYPE_RBR);
     }
 
+    /**
+     * parses a UserStory from words that conforms to format 3.
+     * @param words
+     * @param originalStory
+     * @return UserStory instance
+     */
     private UserStory parseFormat3(String[] words, String originalStory) {
         Map.Entry<String, Integer> roleVals = parseRole(words, 0);
         String rolePart = roleVals.getKey();
-        int i = roleVals.getValue();
+        int i = roleVals.getValue(); //index that next part starts from.
 
-        List requestWordList = Arrays.asList(words).subList(i,words.length);
+        List<String> requestWordList = Arrays.asList(words).subList(i,words.length);
         String requestPart = String.join(" ", requestWordList);
 
         return new UserStory(rolePart,requestPart,null,originalStory,UserStory.Type.TYPE_RR);
     }
 
-    /** Extracts role part of the user story
-     *
+    /** Extracts role part of the user story words
+     *  This function should be used only if the word array conforms to the given formats. Otherwise this could cause an
+     *  out of bounds exception.
      * @param words
      * @param startIndex
      * @return Role part as key, and next index to parse as value
@@ -90,16 +112,17 @@ public class UserStoryParser {
         int i = startIndex;
         ArrayList<String> roleWords = new ArrayList<>();
 
-        while(!words[i].equals("olarak")){
+        while(!words[i].equals("olarak")){//"olarak" is the last word of role parts
             roleWords.add(words[i]);
             i++;
         }
         roleWords.add(words[i]);
-        return new HashMap.SimpleEntry<>(String.join(" ",roleWords), ++i);
+        return new HashMap.SimpleEntry<>(String.join(" ",roleWords), ++i); //used as tuple implementation
     }
 
-    /** Extracts request part of the user story
-     *
+    /** Extracts request part of the user story words.
+     *  This function should be used only if the word array conforms to the given formats. Otherwise this could cause an
+     *  infinite loop.
      * @param words
      * @param startIndex
      * @return Request part as key, and next index to parse as value
@@ -113,41 +136,42 @@ public class UserStoryParser {
 
         while(true){
             requestWords.add(words[i]);
-            if(requestKeyWords1.contains(words[i])){
+            if(requestKeyWords1.contains(words[i])){//istiyorum/istiyoruz format
                 break;
             }
-            else if(requestKeyWords2.contains(words[i]) && words[i+1].equals("var")){
+            else if(requestKeyWords2.contains(words[i]) && words[i+1].equals("var")){//ihtiyacım/ihtiyacımız var format
                 requestWords.add(words[++i]);
                 break;
             }
             i++;
         }
 
-        return new HashMap.SimpleEntry<>(String.join(" ",requestWords), ++i);
+        return new HashMap.SimpleEntry<>(String.join(" ",requestWords), ++i); //used as tuple implementation
     }
 
-    /** Extracts benefit part of the user story
-     *
+    /** Extracts benefit part of the user story words
+     *  This function should be used only if the word array conforms to the formats 1. Otherwise this could cause an
+     *  out of bounds exception.
      * @param words
      * @param startIndex
      * @return Benefit part as key, and next index to parse as value
      */
-    private Map.Entry<String,Integer> parseBenefit(String[] words, int startIndex) {
+    private Map.Entry<String,Integer> parseBenefitFormat2(String[] words, int startIndex) {
         int i = startIndex;
         ArrayList<String> benefitWords = new ArrayList<>();
 
-        while(!words[i].equals("için")){
+        while(!words[i].equals("için")){ //Benefits end with "için"
             benefitWords.add(words[i]);
             i++;
         }
 
         benefitWords.add(words[i]);
 
-        return new HashMap.SimpleEntry<>(String.join(" ",benefitWords), ++i);
+        return new HashMap.SimpleEntry<>(String.join(" ",benefitWords), ++i); //used as tuple implementation
     }
 
     /**
-     * Removes every non alpha numeric character
+     * Removes every non alpha numeric character and converts the string to lowercase
      * @param input
      * @return normalized string
      */

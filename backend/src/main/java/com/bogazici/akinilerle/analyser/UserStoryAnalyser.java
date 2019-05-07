@@ -11,6 +11,7 @@ import zemberek.normalization.TurkishSpellChecker;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -105,9 +106,15 @@ public class UserStoryAnalyser {
      */
     private Report checkSentence(UserStory userStory){
         List<String> roleVerbs = getVerbs(userStory.getRole());
+        Report.ReportBuilder builder = Report.builder()
+                .type(Report.Type.ERROR);
+
+        if(Pattern.matches(".*\\(.*\\).*",userStory.getOriginalString())){ //Marks additional notes inside parantheses that violates minimal quality
+            builder.message("Kullanıcı hikayesi minimal olmalı, parantez içinde ekstra açıklama içermemelidir.");
+        }
+
         if(roleVerbs.size() > 0){
-            return Report.builder()
-                    .type(Report.Type.ERROR)
+            return builder
                     .message("Kullanıcı hikayesinin rol kısmı yüklem içermemelidir. Yüklemler: " + roleVerbs)
                     .build();
         }
@@ -117,14 +124,12 @@ public class UserStoryAnalyser {
             benefitVerbs = getVerbs(userStory.getBenefit());
         }
         if(userStory.getType().equals(UserStory.Type.TYPE_RBR) && benefitVerbs.size() > 0){
-            return Report.builder()
-                    .type(Report.Type.ERROR)
+            return builder
                     .message("Kullanıcı hikayesinin fayda kısmı yüklem içermemelidir. Yüklemler: " + benefitVerbs)
                     .build();
         }
         else if(userStory.getType().equals(UserStory.Type.TYPE_RRB) && benefitVerbs.isEmpty()){
-            return Report.builder()
-                    .type(Report.Type.ERROR)
+            return builder
                     .message("Kullanıcı hikayesinin fayda kısmı yüklemli bir cümle olmalıdır: " + userStory.getBenefit())
                     .build();
         }

@@ -109,7 +109,9 @@ public class UserStoryAnalyser {
         Report.ReportBuilder builder = Report.builder()
                 .type(Report.Type.ERROR);
 
+        boolean errorFound = false;
         if(Pattern.matches(".*\\(.*\\).*",userStory.getOriginalString())){ //Marks additional notes inside parantheses that violates minimal quality
+            errorFound = true;
             builder.message("Kullanıcı hikayesi minimal olmalı, parantez içinde ekstra açıklama içermemelidir.");
         }
 
@@ -130,11 +132,16 @@ public class UserStoryAnalyser {
         }
         else if(userStory.getType().equals(UserStory.Type.TYPE_RRB) && benefitVerbs.isEmpty()){
             return builder
-                    .message("Kullanıcı hikayesinin fayda kısmı yüklemli bir cümle olmalıdır: " + userStory.getBenefit())
+                    .message("Kullanıcı hikayesinin fayda kısmı yüklemli bir cümle olmalıdır: \"" + userStory.getBenefit() + "\"")
                     .build();
         }
 
+        if(errorFound){
+            return builder.build();
+        }
+        else {
         return null;
+        }
     }
 
     /**

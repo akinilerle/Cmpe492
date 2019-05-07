@@ -16,5 +16,13 @@ public class UserStory {
     private String role;
     private String request;
     private String benefit;
+    private String originalString;
     private Type type;
+
+    public UserStory(String role, String request, String benefit, Type type) {
+        this.role = role;
+        this.request = request;
+        this.benefit = benefit;
+        this.type = type;
+    }
 }

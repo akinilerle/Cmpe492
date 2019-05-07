@@ -21,25 +21,25 @@ public class UserStoryParser {
     private static final String FORMAT_2_REGEX = ".*olarak.* için .*(istiyor(um|uz)|ihtiyacım(ız)? var)";
     private static final String FORMAT_3_REGEX = ".*olarak.*(istiyor(um|uz)|ihtiyacım(ız)? var)";
 
-    public UserStory parseSingle(String userStory){
-        userStory = normalize(userStory);
-        String[] words = userStory.split(" ");
+    public UserStory parseSingle(String originalUserStory){
+        String normalizedUserStory = normalize(originalUserStory);
+        String[] words = normalizedUserStory.split(" ");
 
-        if(Pattern.matches(FORMAT_1_REGEX,userStory)){
-            return parseFormat1(words);
+        if(Pattern.matches(FORMAT_1_REGEX,normalizedUserStory)){
+            return parseFormat1(words,originalUserStory);
         }
-        else if(Pattern.matches(FORMAT_2_REGEX,userStory)){
-            return parseFormat2(words);
+        else if(Pattern.matches(FORMAT_2_REGEX,normalizedUserStory)){
+            return parseFormat2(words,originalUserStory);
         }
-        else if(Pattern.matches(FORMAT_3_REGEX,userStory)){
-            return parseFormat3(words);
+        else if(Pattern.matches(FORMAT_3_REGEX,normalizedUserStory)){
+            return parseFormat3(words,originalUserStory);
         }
         else{
             return null;
         }
     }
 
-    private UserStory parseFormat1(String[] words) {
+    private UserStory parseFormat1(String[] words, String originalStory) {
         Map.Entry<String, Integer> roleVals = parseRole(words, 0);
         String rolePart = roleVals.getKey();
         int i = roleVals.getValue();
@@ -51,10 +51,10 @@ public class UserStoryParser {
         List benefitWordList = Arrays.asList(words).subList(i,words.length);
         String benefitPart = String.join(" ", benefitWordList);
 
-        return new UserStory(rolePart,requestPart,benefitPart,UserStory.Type.TYPE_RRB);
+        return new UserStory(rolePart,requestPart,benefitPart,originalStory,UserStory.Type.TYPE_RRB);
     }
 
-    private UserStory parseFormat2(String[] words) {
+    private UserStory parseFormat2(String[] words, String originalStory) {
         Map.Entry<String, Integer> roleVals = parseRole(words, 0);
         String rolePart = roleVals.getKey();
         int i = roleVals.getValue();
@@ -66,10 +66,10 @@ public class UserStoryParser {
         List requestWordList = Arrays.asList(words).subList(i,words.length);
         String requestPart = String.join(" ", requestWordList);
 
-        return new UserStory(rolePart,requestPart,benefitPart,UserStory.Type.TYPE_RBR);
+        return new UserStory(rolePart,requestPart,benefitPart,originalStory,UserStory.Type.TYPE_RBR);
     }
 
-    private UserStory parseFormat3(String[] words) {
+    private UserStory parseFormat3(String[] words, String originalStory) {
         Map.Entry<String, Integer> roleVals = parseRole(words, 0);
         String rolePart = roleVals.getKey();
         int i = roleVals.getValue();
@@ -77,7 +77,7 @@ public class UserStoryParser {
         List requestWordList = Arrays.asList(words).subList(i,words.length);
         String requestPart = String.join(" ", requestWordList);
 
-        return new UserStory(rolePart,requestPart,null,UserStory.Type.TYPE_RR);
+        return new UserStory(rolePart,requestPart,null,originalStory,UserStory.Type.TYPE_RR);
     }
 
     /** Extracts role part of the user story

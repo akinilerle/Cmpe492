@@ -39,7 +39,7 @@ public class UserStoryAnalyser {
         if(spellCheckReport == null && sentenceReport == null){ //both checks have no warning or errors
             return Report.builder()
                     .type(Report.Type.OK)
-                    .story(userStory.toString())
+                    .story(userStory.getOriginalString())
                     .userStoryType(userStory.getType())
                     .build();
         }
@@ -85,7 +85,7 @@ public class UserStoryAnalyser {
                 String errorMessage = "Yazım hatası: \"" + word + "\". Bunu mu demek istediniz? : "
                         + (suggestions.size() <= 3 ? suggestions : suggestions.subList(0,3)); //add suggestions
 
-                builder.message(errorMessage).story(userStory.toString());
+                builder.message(errorMessage).story(userStory.getOriginalString());
             }
         }
 

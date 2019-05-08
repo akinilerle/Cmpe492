@@ -48,11 +48,8 @@ public class UserStoryServiceTest {
                 "Bir product manager olarak, kullanıcı hikayelerimi excel dosyasından topluca kontrol " +
                 "edebilmek istiyorum; asd ; asd; asd\n").getBytes());
 
-        List<Report> reports = userStoryService.analyseMultipleUserStoryCsvFile(mockMultipartFile);
-        assertEquals(3, reports.size());
-        for(Report report: reports){
-            assertEquals(Report.Type.WARNING, report.getType());
-        }
+        String response = userStoryService.analyseMultipleUserStoryCsvFile(mockMultipartFile);
+        assertEquals(4, response.split("\n").length);
     }
 
     @Test
@@ -66,11 +63,8 @@ public class UserStoryServiceTest {
                 "asdafsa;Bir product manager olarak, kullanıcı hikayelerimi excel dosyasından " +
                 "topluca kontrol edebilmek istiyorum; asd ; asd; asd\n").getBytes());
 
-        List<Report> reports = userStoryService.analyseMultipleUserStoryCsvFile(mockMultipartFile);
-        assertEquals(3, reports.size());
-        for(Report report: reports){
-            assertEquals(Report.Type.WARNING, report.getType());
-        }
+        String response = userStoryService.analyseMultipleUserStoryCsvFile(mockMultipartFile);
+        assertEquals(4, response.split("\n").length);
     }
 
     @Test

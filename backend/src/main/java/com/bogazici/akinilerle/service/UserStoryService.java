@@ -60,7 +60,7 @@ public class UserStoryService {
     }
 
 
-    public List<Report> analyseMultipleUserStoryCsvFile(MultipartFile uploadingFile) throws IOException {
+    public String analyseMultipleUserStoryCsvFile(MultipartFile uploadingFile) throws IOException {
         if (!uploadingFile.isEmpty()) {
             //Construct the file in memory as list of strings
             byte[] bytes = uploadingFile.getBytes();
@@ -83,14 +83,39 @@ public class UserStoryService {
             }
 
             int finalIndexOfUserStories = indexOfUserStories;
-            List<String> userStoryList = Arrays.asList(rows)
-                                                .subList(1,rows.length) //delete the headers row
-                                                .stream()
-                                                .filter(s -> !s.isEmpty())//filter empty rows
-                                                .map(s -> s.split(";")[finalIndexOfUserStories]) //get the user story columns
-                                                .collect(Collectors.toList());
 
-            return analyseMultipleUserStory(userStoryList);
+            List<String> rowList = Arrays.asList(rows)
+                    .stream()
+                    .filter(s -> !s.isEmpty())//filter empty rows
+                    .filter(s -> !s.split(";")[finalIndexOfUserStories].equals("")) //get the user story columns
+                    .collect(Collectors.toList());
+
+            List<String> userStoryList = rowList
+                    .subList(1,rowList.size())
+                    .stream()
+                    .map(s -> s.split(";")[finalIndexOfUserStories]) //get the user story columns
+                    .collect(Collectors.toList());
+
+            List<Report> reportList = analyseMultipleUserStory(userStoryList);
+
+            StringBuilder sb = new StringBuilder();
+            sb.append(rowList.get(0));
+            sb.append(";Hatalar/Uyarılar");
+            for(int i=0; i<reportList.size(); i++){
+                sb.append("\n");
+                sb.append(rowList.get(i+1));
+                sb.append(";");
+                int j = 1;
+                for(String message: reportList.get(i).getMessages()){
+                    sb.append(j);
+                    sb.append(") ");
+                    sb.append(message);
+                    sb.append(" ");
+                    j++;
+                }
+            }
+
+            return sb.toString();
         }
         else {
             throw new IllegalArgumentException("Boş Dosya");

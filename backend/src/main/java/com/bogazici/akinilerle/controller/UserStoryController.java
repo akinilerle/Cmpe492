@@ -54,8 +54,19 @@ public class UserStoryController {
     }
 
     @PostMapping("/analyse/csv")
-    public List<Report> analyseMultipleUserStoryCsvFile(@RequestParam("uploadingFiles") MultipartFile uploadingFile) throws IOException {
-        return service.analyseMultipleUserStoryCsvFile(uploadingFile);
+    public ResponseEntity<InputStreamResource> analyseMultipleUserStoryCsvFile(@RequestParam("uploadingFiles") MultipartFile uploadingFile) throws IOException {
+        String responseString = service.analyseMultipleUserStoryCsvFile(uploadingFile);
+        InputStream inputStream = new ByteArrayInputStream(responseString.getBytes());
+        InputStreamResource responseFileStream = new InputStreamResource(inputStream);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=kullaniciHikayeleri.csv");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(responseString.length())
+                .contentType(MediaType.parseMediaType("application/octet-stream"))
+                .body(responseFileStream);
     }
 
     @PostMapping("/analyse/list")

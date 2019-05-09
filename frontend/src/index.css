@@ -1,0 +1,47 @@
+@import '~antd/dist/antd.css';
+
+html,
+body {
+  height: 100%;
+}
+
+#root {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.ant-layout-header {
+  padding: 0;
+  height: 48px;
+}
+
+.ant-layout-content {
+  flex: 1;
+}
+
+.ant-layout-footer {
+  background: #fff;
+  text-align: center;
+}
+
+.header-tooltip,
+.notice-icon,
+.header-avatar,
+.header-language {
+  padding: 0 10px;
+  line-height: 48px;
+  height: 48px;
+  display: inline-block;
+}
+
+.header-tooltip:hover,
+.notice-icon:hover,
+.header-avatar:hover,
+.header-language:hover {
+  background: rgba(0, 0, 0, .025);
+}
+
+.header-avatar .ant-avatar {
+  margin-right: 5px;
+}

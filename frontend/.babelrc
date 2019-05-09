@@ -1,0 +1,16 @@
+{
+  "plugins": [
+    [
+      "@babel/plugin-proposal-decorators",
+      {
+        "legacy": true
+      }
+    ],
+    ["react-intl", {
+      "messagesDir": "build/messages"
+    }]
+  ],
+  "presets": [
+    "react-app"
+  ]
+}

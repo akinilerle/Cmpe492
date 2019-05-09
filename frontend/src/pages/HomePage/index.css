@@ -1,0 +1,64 @@
+.home-page,
+.home-page .home-page-widget-column {
+  min-height: 100%;
+  height: 100%;
+}
+
+.my-positions>.ant-card-body,
+.my-candidates>.ant-card-body,
+.my-pools>.ant-card-body,
+.my-upcoming-events>.ant-card-body,
+.my-tasks>.ant-card-body {
+  overflow: scroll;
+  height: calc(100% - 80px);
+  padding: 8px;
+}
+
+.my-tasks .ant-avatar {
+  cursor: pointer;
+}
+
+.ant-dropdown-link {
+  cursor: pointer;
+  color: #008dff;
+}
+
+.ant-card-head-title {
+  text-align: center;
+}
+
+.checked {
+  text-decoration: line-through;
+}
+
+.todo-filter {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.ant-radio-button-wrapper {
+  min-width: 100px;
+}
+
+.ant-card-bordered {
+  margin-top: 16px;
+}
+
+.anticon {
+  cursor: pointer;
+}
+
+.anticon-cross {
+  color: #c41d7f;
+}
+
+.remove-wrapper {
+  position: absolute;
+  width: calc(100% - 50px);
+  text-align: right;
+}
+
+.todo-description-wrapper {
+  padding-right: 50px;
+}

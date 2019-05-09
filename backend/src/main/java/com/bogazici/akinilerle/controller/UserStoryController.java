@@ -4,6 +4,7 @@ import com.bogazici.akinilerle.model.request.MultipleUserStory;
 import com.bogazici.akinilerle.model.request.SingleUserStory;
 import com.bogazici.akinilerle.model.response.Report;
 import com.bogazici.akinilerle.service.UserStoryService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -19,8 +20,10 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @RestController
+@Slf4j
 public class UserStoryController {
 
     private UserStoryService service;
@@ -36,15 +39,30 @@ public class UserStoryController {
         return service.analyseSingleUserStory(userStory.getUserStory());
     }
 
+    @PostMapping("/analyse/file")
+    public ResponseEntity<InputStreamResource> analyseMultipleUserStoryFile(@RequestParam("file") MultipartFile uploadingFile) throws IOException {
+        String fileName = uploadingFile.getOriginalFilename();
+        if(Pattern.matches(".*\\.txt",fileName)){
+            return analyseMultipleUserStoryTxtFile(uploadingFile);
+        }
+        else if(Pattern.matches(".*\\.csv",fileName)) {
+            return analyseMultipleUserStoryCsvFile(uploadingFile);
+        }
+        else{
+            throw new IllegalArgumentException("Yalnızca Txt ve Csv dosyaları desteklenmektedir.");
+        }
+    }
+
+
     @PostMapping("/analyse/txt")
-    public ResponseEntity<InputStreamResource> analyseMultipleUserStoryTxtFile(@RequestParam("uploadingFiles") MultipartFile uploadingFile) throws IOException {
+    public ResponseEntity<InputStreamResource> analyseMultipleUserStoryTxtFile(@RequestParam("file") MultipartFile uploadingFile) throws IOException {
         List<Report> reports = service.analyseMultipleUserStoryTxtFile(uploadingFile);
         String responseString = createResponseStringTxt(reports);
         InputStream inputStream = new ByteArrayInputStream(responseString.getBytes());
         InputStreamResource responseFileStream = new InputStreamResource(inputStream);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=kullaniciHikayeleri.txt");
+        headers.add("asdasd", "kullaniciHikayeleri.txt");
 
         return ResponseEntity.ok()
                 .headers(headers)
@@ -54,18 +72,18 @@ public class UserStoryController {
     }
 
     @PostMapping("/analyse/csv")
-    public ResponseEntity<InputStreamResource> analyseMultipleUserStoryCsvFile(@RequestParam("uploadingFiles") MultipartFile uploadingFile) throws IOException {
+    public ResponseEntity<InputStreamResource> analyseMultipleUserStoryCsvFile(@RequestParam("file") MultipartFile uploadingFile) throws IOException {
         String responseString = service.analyseMultipleUserStoryCsvFile(uploadingFile);
         InputStream inputStream = new ByteArrayInputStream(responseString.getBytes());
         InputStreamResource responseFileStream = new InputStreamResource(inputStream);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=kullaniciHikayeleri.csv");
+        headers.add("asdasd", "kullaniciHikayeleri.csv");
 
         return ResponseEntity.ok()
-                .headers(headers)
                 .contentLength(responseString.length())
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
+                .headers(headers)
                 .body(responseFileStream);
     }
 

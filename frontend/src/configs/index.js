@@ -1,13 +1,13 @@
 const dev = {
   // analyse: { endpoint: 'http://52.55.148.195:5000/' },
-  analyse: { endpoint: 'http://localhost:5000/analyse' },
+  analyse: { endpoint: 'http://52.55.148.195:5000/analyse' },
   upload: {
     txt: {
-      endpoint: 'http://localhost:5000/analyse/file'
+      endpoint: 'http://52.55.148.195:5000/analyse/file'
     }
   },
   csv: {
-    endpoint: 'http://192.168.1.41:5000/analyse/txt'
+    endpoint: 'http://52.55.148.195:5000/analyse/txt'
   }
 };
 

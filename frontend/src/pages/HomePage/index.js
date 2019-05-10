@@ -3,18 +3,7 @@ import { observer } from 'mobx-react';
 import { analyseService } from '../../services';
 import reqwest from 'reqwest';
 import classnames from 'classnames';
-import {
-  Alert,
-  Button,
-  Card,
-  Col,
-  Form,
-  Input,
-  Icon,
-  Upload,
-  Row,
-  Tabs
-} from 'antd';
+import { Alert, Button, Card, Col, Form, Input, Icon, Upload, Row, Tabs } from 'antd';
 
 import configs from '../../configs';
 
@@ -22,7 +11,6 @@ import './index.css';
 
 const InputGroup = Input.Group;
 const TabPane = Tabs.TabPane;
-
 
 class HomePage extends Component {
   state = {
@@ -46,25 +34,21 @@ class HomePage extends Component {
       if (!err) {
         let benefit, userStory;
 
-        if(this.state.formatTab === 'format1' && (!values.role1 || !values.request1)){
-          alert("Rol ve İstek alanları zorunludur");
+        if (this.state.formatTab === 'format1' && (!values.role1 || !values.request1)) {
+          alert('Rol ve İstek alanları zorunludur');
           return;
         }
-        if(this.state.formatTab === 'format2' && (!values.role2 || !values.request2)){
-          alert("Rol ve İstek alanları zorunludur");
+        if (this.state.formatTab === 'format2' && (!values.role2 || !values.request2)) {
+          alert('Rol ve İstek alanları zorunludur');
           return;
         }
 
         if (this.state.formatTab === 'format1') {
           benefit = values.benefit1 ? `Böylece ${values.benefit1}.` : '';
-          userStory = `Bir ${values.role1} olarak, ${
-            values.request1
-          } istiyorum. ${benefit}`;
+          userStory = `Bir ${values.role1} olarak, ${values.request1} istiyorum. ${benefit}`;
         } else {
           benefit = values.benefit2 ? `${values.benefit2} için, ` : '';
-          userStory = `Bir ${values.role2} olarak, ${benefit}${
-            values.request2
-          } istiyorum.`;
+          userStory = `Bir ${values.role2} olarak, ${benefit}${values.request2} istiyorum.`;
         }
 
         analyseService
@@ -118,16 +102,14 @@ class HomePage extends Component {
           fileList: [],
           uploading: false
         });
-        const href = window.URL.createObjectURL(
-          new Blob([r.response], { type: 'text/plain'})
-        );
+        const href = window.URL.createObjectURL(new Blob([r.response], { type: 'text/plain' }));
         const a = this.linkRef.current;
         a.download = 'kullanici-hikayeleri.' + fileList[0].name.slice(-3);
         a.href = href;
         a.click();
         a.href = '';
       },
-      error: (e) => {
+      error: e => {
         this.setState({
           uploading: false
         });
@@ -140,14 +122,7 @@ class HomePage extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const {
-      uploading,
-      fileList,
-      upperTab,
-      formatTab,
-      showAlert,
-      alertMessages
-    } = this.state;
+    const { uploading, fileList, upperTab, formatTab, showAlert, alertMessages } = this.state;
 
     const props = {
       onRemove: file => {
@@ -170,22 +145,11 @@ class HomePage extends Component {
     };
 
     return (
-      <Row
-        className="home-page"
-        type="flex"
-        justify="space-around"
-        align="top"
-        gutter={8}
-      >
+      <Row className="home-page" type="flex" justify="space-around" align="top" gutter={8}>
         <Col span={12}>
           <Card>
             <div>
-              <Tabs
-                defaultActiveKey="editor"
-                value={upperTab}
-                onChange={this.changeFormatTab}
-                style={{ height: 700 }}
-              >
+              <Tabs defaultActiveKey="editor" value={upperTab} onChange={this.changeFormatTab} style={{ height: 700 }}>
                 <TabPane tab="Editor" key="editor">
                   <Tabs
                     defaultActiveKey="format1"
@@ -198,11 +162,7 @@ class HomePage extends Component {
                       <Form onSubmit={this.handleSubmit} className="login-form">
                         <Form.Item>
                           <InputGroup compact>
-                            <Input
-                              style={{ width: 50 }}
-                              readOnly
-                              defaultValue="Bir"
-                            />
+                            <Input style={{ width: 50 }} readOnly defaultValue="Bir" />
                             {getFieldDecorator('role1', {
                               rules: [
                                 {
@@ -212,11 +172,7 @@ class HomePage extends Component {
                               ]
                             })(<Input style={{ width: 100 }} />)}
 
-                            <Input
-                              style={{ width: 100 }}
-                              readOnly
-                              defaultValue="olarak,"
-                            />
+                            <Input style={{ width: 100 }} readOnly defaultValue="olarak," />
                           </InputGroup>
                         </Form.Item>
                         <Form.Item>
@@ -228,23 +184,13 @@ class HomePage extends Component {
                                   message: 'Zorunlu alan'
                                 }
                               ]
-                            })(<Input 
-                              style={{ width: 200 }} 
-                              />)}
-                            <Input
-                              style={{ width: 100 }}
-                              readOnly
-                              defaultValue="istiyorum."
-                            />
+                            })(<Input style={{ width: 200 }} />)}
+                            <Input style={{ width: 100 }} readOnly defaultValue="istiyorum." />
                           </InputGroup>
                         </Form.Item>
                         <Form.Item>
                           <InputGroup compact>
-                            <Input
-                              style={{ width: '20%' }}
-                              readOnly
-                              defaultValue="Boylece"
-                            />
+                            <Input style={{ width: '20%' }} readOnly defaultValue="Böylece" />
                             {getFieldDecorator('benefit1', {
                               rules: [
                                 {
@@ -252,24 +198,12 @@ class HomePage extends Component {
                                 }
                               ]
                             })(<Input style={{ width: 250 }} />)}
-                            <Input
-                              style={{ width: '30%' }}
-                              readOnly
-                              placeholder=".]"
-                            />
+                            <Input style={{ width: '30%' }} readOnly placeholder=".]" />
                           </InputGroup>
-                          <Input
-                            type="hidden"
-                            name="formatType"
-                            defaultValue="format1"
-                          />
+                          <Input type="hidden" name="formatType" defaultValue="format1" />
                         </Form.Item>
                         <Form.Item>
-                          <Button
-                            type="primary"
-                            htmlType="submit"
-                            className="login-form-button"
-                          >
+                          <Button type="primary" htmlType="submit" className="login-form-button">
                             Gonder
                           </Button>
                           &nbsp;
@@ -281,13 +215,7 @@ class HomePage extends Component {
                         {showAlert && (
                           <Alert
                             message="Hata!.."
-                            description={
-                              <ul>
-                                {alertMessages.map(message => (
-                                  <li>{message}</li>
-                                ))}
-                              </ul>
-                            }
+                            description={<ul>{alertMessages.map(message => <li>{message}</li>)}</ul>}
                             type="error"
                           />
                         )}
@@ -297,11 +225,7 @@ class HomePage extends Component {
                       <Form onSubmit={this.handleSubmit} className="login-form">
                         <Form.Item>
                           <InputGroup compact>
-                            <Input
-                              style={{ width: 50 }}
-                              readOnly
-                              defaultValue="Bir"
-                            />
+                            <Input style={{ width: 50 }} readOnly defaultValue="Bir" />
                             {getFieldDecorator('role2', {
                               rules: [
                                 {
@@ -311,11 +235,7 @@ class HomePage extends Component {
                               ]
                             })(<Input style={{ width: 100 }} />)}
 
-                            <Input
-                              style={{ width: 100 }}
-                              readOnly
-                              defaultValue="olarak,"
-                            />
+                            <Input style={{ width: 100 }} readOnly defaultValue="olarak," />
                           </InputGroup>
                         </Form.Item>
                         <Form.Item>
@@ -327,11 +247,7 @@ class HomePage extends Component {
                                 }
                               ]
                             })(<Input style={{ width: 200 }} />)}
-                            <Input
-                              style={{ width: 50 }}
-                              readOnly
-                              defaultValue="icin,"
-                            />
+                            <Input style={{ width: 50 }} readOnly defaultValue="icin," />
                           </InputGroup>
                         </Form.Item>
                         <Form.Item>
@@ -344,19 +260,11 @@ class HomePage extends Component {
                                 }
                               ]
                             })(<Input style={{ width: 200 }} />)}
-                            <Input
-                              style={{ width: 100 }}
-                              readOnly
-                              defaultValue="istiyorum."
-                            />
+                            <Input style={{ width: 100 }} readOnly defaultValue="istiyorum." />
                           </InputGroup>
                         </Form.Item>
                         <Form.Item>
-                          <Button
-                            type="primary"
-                            htmlType="submit"
-                            className="login-form-button"
-                          >
+                          <Button type="primary" htmlType="submit" className="login-form-button">
                             Gonder
                           </Button>
                           &nbsp;
@@ -369,11 +277,7 @@ class HomePage extends Component {
                           <Alert
                             message="Hata!.."
                             description={
-                              <ul>
-                                {alertMessages.map((message, i) => (
-                                  <li key={'hata2-' + i}>{message}</li>
-                                ))}
-                              </ul>
+                              <ul>{alertMessages.map((message, i) => <li key={'hata2-' + i}>{message}</li>)}</ul>
                             }
                             type="error"
                           />

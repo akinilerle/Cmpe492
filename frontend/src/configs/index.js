@@ -1,25 +1,24 @@
 const dev = {
-  // analyse: { endpoint: 'http://52.55.148.195:5000/' },
-  analyse: { endpoint: 'http://52.55.148.195:5000/analyse' },
+  analyse: { endpoint: 'http://54.167.124.169:5000/analyse' },
   upload: {
     txt: {
-      endpoint: 'http://52.55.148.195:5000/analyse/file'
+      endpoint: 'http://54.167.124.169:5000/analyse/file'
     }
   },
   csv: {
-    endpoint: 'http://52.55.148.195:5000/analyse/txt'
+    endpoint: 'http://54.167.124.169:5000/analyse/txt'
   }
 };
 
 const prod = {
-  analyse: { endpoint: 'http://52.55.148.195:5000/' },
+  analyse: { endpoint: 'http://54.167.124.169:5000/' },
   upload: {
     txt: {
-      endpoint: 'http://52.55.148.195:5000/'
+      endpoint: 'http://54.167.124.169:5000/'
     }
   },
   csv: {
-    endpoint: 'http://52.55.148.195:5000/'
+    endpoint: 'http://54.167.124.169:5000/'
   }
 };
 

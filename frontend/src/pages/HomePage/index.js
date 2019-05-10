@@ -65,7 +65,6 @@ class HomePage extends Component {
                 alertMessages: []
               });
             }
-            console.log(r.data);
           })
           .catch(e => {
             console.error(e);

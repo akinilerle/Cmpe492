@@ -99,11 +99,11 @@ public class UserStoryService {
             List<Report> reportList = analyseMultipleUserStory(userStoryList);
 
             StringBuilder sb = new StringBuilder();
-            sb.append(rowList.get(0));
+            sb.append(rowList.get(0).replaceAll("\r",""));
             sb.append(";Hatalar/Uyarılar");
             for(int i=0; i<reportList.size(); i++){
                 sb.append("\n");
-                sb.append(rowList.get(i+1));
+                sb.append(rowList.get(i+1).replaceAll("\r",""));
                 sb.append(";");
                 int j = 1;
                 for(String message: reportList.get(i).getMessages()){
